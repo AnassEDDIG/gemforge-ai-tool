@@ -1,0 +1,36 @@
+{
+  "name": "gemforge-cli",
+  "author": "Anass Eddig",
+  "version": "1.0.0",
+  "description": "A Node.js CLI tool that uses Gemini AI to document, explain, and analyze your JavaScript code.",
+  "main": "bin/index.js",
+  "scripts": {
+    "gemforge": "node ./bin/index.js"
+  },
+  "keywords": [
+    "cli",
+    "gemini",
+    "ai",
+    "javascript",
+    "documentation",
+    "jsdoc",
+    "gemforge"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "gemforge": "./bin/index.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "boxen": "^8.0.1",
+    "chalk": "^5.6.2",
+    "cli-spinners": "^3.3.0",
+    "commander": "^14.0.1",
+    "figlet": "^1.9.3",
+    "gradient-string": "^3.0.0",
+    "inquirer": "^12.9.6",
+    "inquirer-fuzzy-path": "^2.3.0",
+    "ora": "^9.0.0"
+  }
+}

@@ -4,6 +4,21 @@ import path from "node:path";
 import chalk from "chalk";
 import { createGeminModel } from "../lib/gemini.js";
 
+/**
+ * Executes a command to generate code based on a service's metadata and a given file.
+ * It reads the file content, sends it to a Gemini model with a prompt, and saves the generated code to a file.
+ *
+ * @async
+ * @function ExecuteCommand
+ * @param {Object} serviceMetaData - Metadata about the service, including its name and prompt.
+ * @param {string} serviceMetaData.value - The name of the service.
+ * @param {string} serviceMetaData.prompt - The prompt to be used when generating code.
+ * @param {string} file - The path to the file containing the code to be processed.
+ * @returns {Promise<string|undefined>} - A promise that resolves with the generated code, or undefined if an error occurred.
+ *
+ * @throws {Error} - Throws an error if file reading or writing fails, or if the Gemini model encounters an issue.
+ */
+
 export async function ExecuteCommand(serviceMetaData, file) {
   const { value: serviceName, prompt } = serviceMetaData;
   // Start spinner
@@ -27,13 +42,14 @@ export async function ExecuteCommand(serviceMetaData, file) {
         1. Only modify or respond to the code above.
         2. Output must always be enclosed in a markdown code block (e.g. \`\`\`js ... \`\`\`).
         3. Do not include explanations or text unless explicitly requested.
-        4. If the input is not valid JavaScript, respond with:
+        4. Always provide full complete response and code if requested. 
+        5. If the input is not valid JavaScript, respond with:
           "❌ This tool only supports JavaScript files for now."
 
         Be concise and strictly follow the task description.
         `);
 
-    const output = result.response.text();
+    const output = result.response?.text();
 
     // Extracting code block(s) from markdown
     const codeBlockRegex = /```(?:\w+)?\n([\s\S]*?)```/g;
@@ -58,6 +74,8 @@ export async function ExecuteCommand(serviceMetaData, file) {
   } catch (err) {
     // Fail spinner
     spinner.fail("An error occurred while generating code");
-    console.error(err.message);
+    if ((process.env.NODE_ENV = "development")) {
+      console.error("An unexpected error occurred: ", err.message);
+    }
   }
 }

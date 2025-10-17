@@ -4,46 +4,63 @@ import { createGeminModel } from "../lib/gemini.js";
 import ora from "ora";
 
 export async function VerifyApiKey(apiKey) {
-  // Start spinner
+  // Initialize spinner with a descriptive message
   const spinner = ora(
-    chalk.cyan("Verifying your API key...")
+    chalk.cyan("Verifying API key and establishing connection...")
   ).start();
 
   try {
-    // using the the apiKey in test call to gemini
-    const result = await createGeminModel(apiKey).generateContent(
-      `what's today's date`
-    );
-    const output = result.response.text();
-    // if we got an output means the api key is working and all set
-    if (output) {
-      spinner.succeed(
-        chalk.green(`Welcome to GemForge your assistant is ready •ᴗ•`)
-      );
-      return true;
-    }
-  } catch (err) {
-    spinner.fail(
-      chalk.red("Verification failed. Please provide a valid API key.")
-    );
-    if (err.message?.includes("403") || err.message?.includes("permission")) {
-      console.log(
-        chalk.yellow("Your API key seems invalid or lacks access rights.")
-      );
-    }
+    // robust and less resource-intensive prompt
+    const gemini = createGeminModel(apiKey); // create once, reuse
+    const result = await gemini.generateContent("What is the current year?");
+    const output = result.response?.text(); // Safe access using optional chaining
 
-    console.log(
-      boxen(`${chalk.yellow("➤ This app uses Gemini AI internally, so you need an API key.")}
-${chalk.cyan("👉 Solution:")}
-1. You can get one from: https://aistudio.google.com/app/apikey.
-2. Run the GemForge tool with » npm run gemforge --api-key YOUR_API_KEY.
-3. And you are all set happy coding •ᴗ•.`,
-        {
-          padding: 1,
-          borderColor: "red",
-          borderStyle: "round",
-        }
-      )
-    );
+    if (output) {
+      spinner.succeed(chalk.green("API key verified. GemForge is ready!"));
+      return true;
+    } else {
+      // Handle cases where the API returns an empty response gracefully
+      spinner.fail(chalk.red("Verification failed: Empty response from API."));
+      displayHelpMessage(); // Call error message if failed
+      return false;
+    }
+  } catch (error) {
+    // More specific error handling and logging
+    spinner.fail(chalk.red("API key verification failed."));
+    if (
+      error.message?.includes("400") ||
+      error.message?.includes("permission")
+    ) {
+      console.log(chalk.yellow("Invalid API key or insufficient permissions."));
+    } else {
+      if (process.env.NODE_ENV === "development")
+        // Log the full error for debugging
+        console.error(chalk.red("An unexpected error occurred: "), error);
+      else {
+        console.error(
+          chalk.red("An unexpected error occurred. Please try again later!")
+        );
+      }
+    }
+    displayHelpMessage(); // Call error message if failed
+    return false;
   }
+}
+
+// the boxen message. steps to get an api key
+function displayHelpMessage() {
+  console.log(
+    boxen(
+      `${chalk.yellow(
+        "➤ GemForge requires a Gemini AI API key."
+      )}\n${chalk.cyan(
+        "👉 Solution:"
+      )}\n1. Get a key from: https://aistudio.google.com/app/apikey.\n2. Run GemForge with: npx gemforge-cli --api-key YOUR_API_KEY.\n3. Happy coding! •ᴗ•`,
+      {
+        padding: 1,
+        borderColor: "red",
+        borderStyle: "round",
+      }
+    )
+  );
 }

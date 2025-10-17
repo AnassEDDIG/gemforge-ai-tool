@@ -10,8 +10,8 @@ export const cliServices = [
     name: "Optimize code",
     value: "Optimize",
     prompt:
-      "Optimize this code to the maximum like a senior developer; add changes as comments: ",
-    available: false,
+      "Optimize this code to the maximum like a senior developer, add changes as comments: ",
+    available: true,
   },
   {
     name: "Generate test cases",

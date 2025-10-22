@@ -19,7 +19,7 @@ export async function introUI() {
   // Info block (aligned)
   const info = [
     { label: "Author", value: "Anass Eddig" },
-    { label: "Version", value: "1.1.1" },
+    { label: "Version", value: "1.2.0" },
     {
       label: "Purpose",
       value:

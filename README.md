@@ -1,6 +1,9 @@
 # GemForge CLI
+[![npm version](https://img.shields.io/npm/v/gemforge-cli)](https://www.npmjs.com/package/gemforge-cli)
+[![npm downloads](https://img.shields.io/npm/dm/gemforge-cli)](https://www.npmjs.com/package/gemforge-cli)
+[![License](https://img.shields.io/npm/l/gemforge-cli)](LICENSE)
 
-![GemForge CLI](https://ik.imagekit.io/dk03vfb2z/anass/Portfolio/gemforge/gemforge-cli.png?updatedAt=1760283335288)
+![GemForge CLI](https://ik.imagekit.io/dk03vfb2z/anass/Portfolio/gemforge/gemforge-cli-ui.png?updatedAt=1761156410036)
 
 **GemForge** is a JavaScript-focused CLI assistant powered by Google Gemini AI.  
 It helps developers **document, analyze, and assist with JS code**, as well as general programming topics.

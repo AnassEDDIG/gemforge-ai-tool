@@ -10,7 +10,16 @@ export const cliServices = [
     name: "Optimize code",
     value: "Optimize",
     prompt:
-      "Optimize this code to the maximum like a senior developer, add changes as comments: ",
+      "Optimize this code like a senior developer. Focus on readability, performance, and modern JavaScript patterns. Add explanations as comments: ",
+    available: true,
+  },
+  {
+    name: "Find bugs or logic errors",
+    value: "Debug",
+    prompt: `Review this code carefully and return the entire code with the following rule: 
+If no logic errors or bugs are found, add a comment at the top: '// ✅ No bugs or errors found.' 
+If errors are found, comment them clearly inline in the code. Do not return plain text, always return the code.`,
+
     available: true,
   },
   {
@@ -58,7 +67,14 @@ export const cliServices = [
     available: false,
   },
   {
-    name: "Exit",
+    name: "Generate README",
+    value: "GenerateReadme",
+    prompt:
+      "Generate a professional README.md for this project based on its code and purpose: ",
+    available: false,
+  },
+  {
+    name: "➜] Exit ",
     value: "Exit",
     available: true,
   },
@@ -69,4 +85,7 @@ export const codeInputChoices = [
   { name: "Use existing file", value: "filePath", available: true },
   { name: "Paste Code to terminal", value: "terminal", available: false },
   { name: "Open your editor", value: "editor", available: false },
+  { name: "Fetch code from URL or repo", value: "url", available: false },
+  { name: "Use clipboard content", value: "clipboard", available: false },
+  { name: "⬅ Back", value: "back", available: true },
 ];

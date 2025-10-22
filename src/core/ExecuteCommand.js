@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import ora from "ora";
 import path from "node:path";
 import chalk from "chalk";
+import inquirer from "inquirer";
 import { createGeminModel } from "../lib/gemini.js";
 
 /**
@@ -23,7 +24,7 @@ export async function ExecuteCommand(serviceMetaData, file) {
   const { value: serviceName, prompt } = serviceMetaData;
   // Start spinner
   const spinner = ora("Generating code...").start();
-
+  
   try {
     const code = await fs.readFile(file, "utf-8");
     const result = await createGeminModel(process.env.GEMINI_API_KEY)
@@ -67,15 +68,27 @@ export async function ExecuteCommand(serviceMetaData, file) {
 
     // Success spinner
     spinner.succeed(
-      chalk.green(`Code generated and saved to ${outputFolderPath}`)
+      chalk.bgMagentaBright(`Code generated and saved to ${outputFolderPath}`)
     );
-
+    // Wait for user to acknowledge
+    await inquirer.prompt([
+      {
+        type: "input",
+        name: "continue",
+        message: "Press Enter to return to menu:",
+      },
+    ]);
     return extractedCode;
-  } catch (err) {
+  } catch (error) {
     // Fail spinner
     spinner.fail("An error occurred while generating code");
+    if (error.status === 503) {
+      console.log(
+        chalk.yellow("The model is overloaded. Please try again later.")
+      );
+    }
     if ((process.env.NODE_ENV = "development")) {
-      console.error("An unexpected error occurred: ", err.message);
+      console.error("An unexpected error occurred: ", error.message);
     }
   }
 }

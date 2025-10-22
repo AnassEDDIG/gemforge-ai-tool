@@ -12,7 +12,8 @@ It helps developers **document, analyze, and assist with JS code**, as well as g
 ## 🚀 Features
 
 - Document code using JsDoc ✅
-- Optimize code (Coming soon…)
+- Optimize code ✅
+- Find bugs or logic errors ✅
 - Generate test cases (Coming soon…)
 - Rename variables professionally (Coming soon…)
 - Explain code in English (Coming soon…)
@@ -20,6 +21,7 @@ It helps developers **document, analyze, and assist with JS code**, as well as g
 - Add a feature (Coming soon…)
 - Detect security flaws (Coming soon…)
 - Explain a programming topic (Coming soon…)
+- Generate README (Coming soon…)
 
 **Code input options**:
 

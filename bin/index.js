@@ -9,7 +9,7 @@ if (!process.env.NODE_ENV) {
 }
 
 // Display the initial UI
-introUI();
+await introUI();
 
 const apikey = extractApiKey();
 if (await VerifyApiKey(apikey)) {

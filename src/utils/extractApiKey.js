@@ -1,21 +1,23 @@
 import { program } from "commander";
 
 export function extractApiKey() {
-  program.option("--api-key, GEMINI_API_KEY").argument("<string>");
-  program.parse();
+  program
+    .option("--api-key <key>", "Gemini API key")
 
-  const apiKey = program.args[0].trim();
+  program.parse(process.argv);
+  const options = program.opts();
 
-  //Validate if apiKey exists
+  // Try to get API key from flag
+  const apiKey = options.apiKey;
+
+  // Validate
   if (!apiKey) {
-    console.error(
-      "API key is required. Provide it via --api-key or GEMINI_API_KEY environment variable."
-    );
-    process.exit(1); // Exit if API key is missing
+    console.log("❌ API key is required. Provide it via --api-key <key>.");
+    process.exit(1);
   }
 
-  // Set the environment variable
-  process.env.GEMINI_API_KEY = apiKey;
+  // Set env variable for later use
+  process.env.GEMINI_API_KEY = apiKey.trim();
 
-  return apiKey;
+  return apiKey.trim();
 }

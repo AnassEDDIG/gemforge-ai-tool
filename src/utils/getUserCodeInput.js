@@ -38,11 +38,17 @@ export async function getUserCodeInput() {
     switch (codeInputChoice) {
       case "filePath":
         return await filePicker();
+      case "back":
+        return null;
       default:
-        console.log(chalk.bgBlue("ℹ️ Option is coming soon !!"));
+        console.log(chalk.bgYellowBright("ℹ️ Option is coming soon !!"));
         return null;
     }
   } catch (error) {
+    if (error.name === "ExitPromptError") {
+      console.log("\n👋 Exiting GemForge... Goodbye!");
+      process.exit(0);
+    }
     if (process.env.NODE_ENV === "development") {
       console.log(
         chalk.red("⚠️ Error while handling input choice:"),

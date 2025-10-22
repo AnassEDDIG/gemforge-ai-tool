@@ -2,44 +2,52 @@ import figlet from "figlet";
 import chalk from "chalk";
 import { retro } from "gradient-string";
 
-export function introUI() {
-  // Create ASCII art title
+export async function introUI() {
+  console.clear();
+
+  // ASCII art title with gradient
   const title = figlet.textSync("GemForge", {
     font: "Standard",
-    horizontalLayout: "full",
+    horizontalLayout: "default",
   });
 
-  console.log(retro(title));
+  console.log(retro.multiline(title));
 
-  // Info block
-  console.log(chalk.cyan.bold("Author:       ") + chalk.white("Anass Eddig"));
-  console.log(chalk.cyan.bold("Version:      ") + chalk.white("1.0.0"));
+  // A soft divider
+  console.log(chalk.greenBright("═".repeat(50)));
+
+  // Info block (aligned)
+  const info = [
+    { label: "Author", value: "Anass Eddig" },
+    { label: "Version", value: "1.1.1" },
+    {
+      label: "Purpose",
+      value:
+        "AI-powered code assistant for documentation, optimization, and testing",
+    },
+    { label: "Powered by", value: "Node.js ⚙️" },
+    {
+      label: "GitHub",
+      value: "https://github.com/AnassEDDIG/gemforge-ai-tool",
+    },
+  ];
+
+  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+  for (const line of info) {
+    console.log(
+      chalk.cyan.bold(line.label.padEnd(13)) + chalk.white(line.value)
+    );
+    // This helps run the fadeIn animation only once
+    if (!process.env.GEMINI_API_KEY) await sleep(200); // 200ms delay between lines
+  }
+
+  // Extra spacing and note
   console.log(
-    chalk.cyan.bold("Purpose:      ") +
-      chalk.white(
-        "AI-powered code assistant for documentation, optimization, testing, and more"
-      )
-  );
-  console.log(chalk.cyan.bold("Powered by:   ") + chalk.yellow("Node.js"));
-  console.log(
-    chalk.cyan.bold("GitHub:       ") +
-      chalk.yellow("https://github.com/AnassEDDIG/gemforge-ai-tool")
-  );
-  console.log(
-    chalk.cyan.bold("Note:         ") +
-      chalk.white(
-        "The current CLI tool primarily supports JavaScript. Additional programming languages will be supported in future updates."
-      )
+    chalk.cyan.bold("\nNote:".padEnd(13)) +
+      chalk.white("Currently supports JavaScript. More languages coming soon!")
   );
 
-  // Separator
-  console.log(
-    chalk.greenBright("──────────────────────────────────────────────")
-  );
-
+  console.log(chalk.greenBright("═".repeat(50)));
   // Motivational / engagement line
-  console.log(chalk.yellow("🚀 Ready to boost your code productivity!"));
-  console.log(
-    chalk.greenBright("──────────────────────────────────────────────\n")
-  );
+  console.log(chalk.yellow("🚀 Ready to boost your code productivity!\n"));
 }

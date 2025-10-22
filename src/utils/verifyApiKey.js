@@ -2,6 +2,7 @@ import boxen from "boxen";
 import chalk from "chalk";
 import { createGeminModel } from "../lib/gemini.js";
 import ora from "ora";
+import { retro } from "gradient-string";
 
 export async function VerifyApiKey(apiKey) {
   // Initialize spinner with a descriptive message
@@ -21,17 +22,20 @@ export async function VerifyApiKey(apiKey) {
     } else {
       // Handle cases where the API returns an empty response gracefully
       spinner.fail(chalk.red("Verification failed: Empty response from API."));
-      displayHelpMessage(); // Call error message if failed
+      displayHelpMessage(); // Call help message if failed
       return false;
     }
   } catch (error) {
-    // More specific error handling and logging
     spinner.fail(chalk.red("API key verification failed."));
     if (
       error.message?.includes("400") ||
       error.message?.includes("permission")
     ) {
       console.log(chalk.yellow("Invalid API key or insufficient permissions."));
+    } else if (error.status === 503) {
+      console.log(
+        chalk.yellow("The model is overloaded. Please try again later.")
+      );
     } else {
       if (process.env.NODE_ENV === "development")
         // Log the full error for debugging
@@ -51,9 +55,7 @@ export async function VerifyApiKey(apiKey) {
 function displayHelpMessage() {
   console.log(
     boxen(
-      `${chalk.yellow(
-        "➤ GemForge requires a Gemini AI API key."
-      )}\n${chalk.cyan(
+      `${retro("➤ GemForge requires a Gemini AI API key.")}\n${chalk.cyan(
         "👉 Solution:"
       )}\n1. Get a key from: https://aistudio.google.com/app/apikey.\n2. Run GemForge with: npx gemforge-cli --api-key YOUR_API_KEY.\n3. Happy coding! •ᴗ•`,
       {
